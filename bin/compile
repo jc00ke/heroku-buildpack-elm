@@ -34,7 +34,7 @@ gunzip "$cache_path/elm.gz"
 log "Make executable"
 chmod +x "$cache_path/elm"
 
-mkdir -p ".elm/bin"
+mkdir -p "$build_path/.elm/bin"
 log "Copy"
-cp "$cache_path/elm" ".elm/bin/"
+cp "$cache_path/elm" "$build_path/.elm/bin/"
 write_profile_d_script
