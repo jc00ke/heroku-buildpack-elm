@@ -21,8 +21,9 @@ function write_profile_d_script() {
   mkdir -p $build_path/.profile.d
 
   touch "$build_path/.profile.d/elm_buildpack_paths.sh"
+  log "PATH: $PATH"
   "export \$HOME/.elm/bin:\$PATH" >> "$build_path/.profile.d/elm_buildpack_paths.sh"
-  "export LC_CTYPE=en_US.utf8" >> "$build_path/.profile.d/elm_buildpack_paths.sh"
+  "export LC_CTYPE=en_US.utf8" >> "$build_path/.profile.d/elm_buildpack_paths.sh""
 }
 
 log "Downloading"
