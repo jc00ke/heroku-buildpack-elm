@@ -2,12 +2,28 @@
 
 set -eo pipefail
 
+indent() {
+  sed -u 's/^/       /'
+}
+
+log() {
+  echo "-----> $1"
+}
+
+
+log "making $1 and $2"
 mkdir -p "$1" "$2"
 build=$(cd "$1/" && pwd)
+log "build dir: $build"
 cache=$(cd "$2/" && pwd)
+log "cache dir: $cache"
 
+log "downloading Elm"
 curl -L -o "$cache/elm.gz" https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+log "gunzipping elm"
 gunzip "$cache/elm.gz"
+log "making elm executable"
 chmod +x "$cache/elm"
 
+log "copying elm to $build"
 cp "$cache/elm" "$build/"
