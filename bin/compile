@@ -17,7 +17,7 @@ cache_path=$(cd "$2/" && pwd)
 env_path=$(cd "$3/" && pwd)
 
 function write_profile_d_script() {
-  output_section "Creating .profile.d with env vars"
+  log "Creating .profile.d with env vars"
   mkdir -p $build_path/.profile.d
 
   local export_line="export PATH=\$HOME/.platform_tools:\$HOME/.platform_tools/elm/bin:\$PATH
