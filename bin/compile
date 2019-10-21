@@ -22,12 +22,14 @@ function write_profile_d_script() {
 
   touch "$build_path/.profile.d/elm_buildpack_paths.sh"
   log "PATH: $PATH"
-  echo "export \$PATH:\$HOME/.elm/bin" >> "$build_path/.profile.d/elm_buildpack_paths.sh"
+  echo "export PATH=\$HOME/.elm/bin:\$PATH" >> "$build_path/.profile.d/elm_buildpack_paths.sh"
   echo "export LC_CTYPE=en_US.utf8" >> "$build_path/.profile.d/elm_buildpack_paths.sh"
 }
 
-log "Downloading"
-curl -L -o "$cache_path/elm.gz" "https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz"
+if ! test -f "$cache_path/elm.gz"; then
+  log "Downloading"
+  curl -L -o "$cache_path/elm.gz" "https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz"
+fi
 log "Gunzipping"
 gunzip "$cache_path/elm.gz"
 log "Make executable"
