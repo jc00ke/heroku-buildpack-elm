@@ -27,9 +27,9 @@ function write_profile_d_script() {
   echo $export_line >> $build_path/.profile.d/elm_buildpack_paths.sh
 }
 
-curl -L -o "$cache/elm.gz" https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
-gunzip "$cache/elm.gz"
-chmod +x "$cache/elm"
+curl -L -o "$cache_path/elm.gz" https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+gunzip "$cache_path/elm.gz"
+chmod +x "$cache_path/elm"
 
-cp "$cache/elm" ".platform_tools/elm/bin/"
+cp "$cache_path/elm" ".platform_tools/elm/bin/"
 write_profile_d_script
