@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -eo pipefail
+
+mkdir -p "$1" "$2"
+build=$(cd "$1/" && pwd)
+cache=$(cd "$2/" && pwd)
+
+curl -L -o "$cache/elm.gz" https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz
+gunzip "$cache/elm.gz"
+chmod +x "$cache/elm"
+
+cp "$cache/elm" "$build/"
