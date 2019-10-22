@@ -44,8 +44,10 @@ function download_elm() {
 }
 
 function extract_elm() {
-  log "Extracting"
-  gunzip "$cache_path/elm.gz"
+  if ! test -f "$cache_path/elm"; then
+    log "Extracting"
+    gunzip "$cache_path/elm.gz"
+  fi
   log "Make executable"
   chmod +x "$cache_path/elm"
 }
