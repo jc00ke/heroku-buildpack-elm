@@ -26,10 +26,7 @@ function write_profile_d_script() {
   log "Creating .profile.d with env vars"
   mkdir -p "$build_path/.profile.d"
 
-  touch "$build_path/.profile.d/elm.sh"
-  log "PATH: $PATH"
-  echo "export PATH=\$PATH:/app/.elm:\$PATH" >> "$build_path/.profile.d/elm.sh"
-  echo "export LC_CTYPE=en_US.utf8" >> "$build_path/.profile.d/elm.sh"
+  echo "export PATH=\$PATH:\$HOME/.elm" >> "$build_path/.profile.d/elm.sh"
 }
 
 if ! test -f "$cache_path/elm.gz"; then
@@ -45,3 +42,4 @@ mkdir -p "$build_path/.elm"
 log "Copy"
 cp "$cache_path/elm" "$build_path/.elm/"
 write_profile_d_script
+log "PATH: $PATH"
