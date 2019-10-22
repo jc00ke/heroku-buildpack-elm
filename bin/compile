@@ -21,12 +21,19 @@ log() {
 mkdir -p "$1" "$2" "$3"
 readonly build_path=$(cd "$1/" && pwd)
 readonly cache_path=$(cd "$2/" && pwd)
+readonly bp_path=$(cd "$(dirname "${0:-}")"; cd ..; pwd)
 
 function write_profile_d_script() {
   log "Creating .profile.d with env vars"
   mkdir -p "$build_path/.profile.d"
 
-  echo "export PATH=\$PATH:\$HOME/.elm" >> "$build_path/.profile.d/elm.sh"
+  echo "export PATH=\"/app/.elm:\$PATH\"" >> "$build_path/.profile.d/elm.sh"
+}
+
+write_export() {
+  local bp_dir="$1"
+  local build_dir="$2"
+  echo "export PATH=\"$build_dir/.elm:\$PATH\"" > $bp_dir/export
 }
 
 if ! test -f "$cache_path/elm.gz"; then
@@ -42,4 +49,4 @@ mkdir -p "$build_path/.elm"
 log "Copy"
 cp "$cache_path/elm" "$build_path/.elm/"
 write_profile_d_script
-log "PATH: $PATH"
+write_export "$bp_path" "$build_path"
