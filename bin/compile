@@ -11,11 +11,13 @@ indent() {
 }
 
 log_section() {
-  echo "-----> ELM: $1"
+  local indentation="----->"
+  echo "${indentation} $1"
 }
 
 log() {
-  echo "-----> ELM: $1"
+  local spacing="      "
+  echo "${spacing} $1"
 }
 
 mkdir -p "$1" "$2" "$3"
@@ -24,29 +26,39 @@ readonly cache_path=$(cd "$2/" && pwd)
 readonly bp_path=$(cd "$(dirname "${0:-}")"; cd ..; pwd)
 
 function write_profile_d_script() {
-  log "Creating .profile.d with env vars"
+  log "Creating .profile.d script to set PATH"
   mkdir -p "$build_path/.profile.d"
-
   echo "export PATH=\"/app/.elm:\$PATH\"" >> "$build_path/.profile.d/elm.sh"
 }
 
-write_export() {
-  local bp_dir="$1"
-  local build_dir="$2"
-  echo "export PATH=\"$build_dir/.elm:\$PATH\"" > $bp_dir/export
+function write_export() {
+  log "Writing export file for PATH"
+  echo "export PATH=\"$build_path/.elm:\$PATH\"" > $bp_path/export
 }
 
-if ! test -f "$cache_path/elm.gz"; then
-  log "Downloading"
-  curl -L -o "$cache_path/elm.gz" "https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz"
-fi
-log "Gunzipping"
-gunzip "$cache_path/elm.gz"
-log "Make executable"
-chmod +x "$cache_path/elm"
+function download_elm() {
+  if ! test -f "$cache_path/elm.gz"; then
+    log "Downloading"
+    curl -L -o "$cache_path/elm.gz" "https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz"
+  fi
+}
 
-mkdir -p "$build_path/.elm"
-log "Copy"
-cp "$cache_path/elm" "$build_path/.elm/"
+function extract_elm() {
+  log "Extracting"
+  gunzip "$cache_path/elm.gz"
+  log "Make executable"
+  chmod +x "$cache_path/elm"
+}
+
+function install_elm() {
+  mkdir -p "$build_path/.elm"
+  log "Copy"
+  cp "$cache_path/elm" "$build_path/.elm/"
+}
+
+log_section "Installing Elm"
+download_elm
+extract_elm
+install_elm
 write_profile_d_script
-write_export "$bp_path" "$build_path"
+write_export
